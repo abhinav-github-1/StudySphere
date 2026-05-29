@@ -16,7 +16,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/invitations")
-@CrossOrigin(origins = "http://localhost:5173")
 public class RoomInvitationController extends BaseController {
 
     @Autowired

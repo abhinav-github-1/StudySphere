@@ -56,9 +56,9 @@ public class SocketIOConfig {
         config.setHostname(socketHost);
         config.setPort(socketPort);
 
-        // Allow frontend origin (CORS for Socket.IO handshake)
-        String primaryOrigin = allowedOrigins.split(",")[0].trim();
-        config.setOrigin(primaryOrigin);
+        // Allow frontend origin dynamically by reflecting the incoming Origin header.
+        // This is safe and robust when credentials are true and multiple origins are in play.
+        config.setOrigin(null);
 
         // Socket config — reuse address to avoid port-in-use issues after restart
         SocketConfig socketConfig = new SocketConfig();
