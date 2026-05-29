@@ -21,7 +21,8 @@ RUN mvn clean package -DskipTests -B
 FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
-# Install Nginx using standard package manager
+# Install Nginx using standard package manager (non-interactive to avoid timezone prompts)
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install -y nginx && \
     rm -rf /var/lib/apt/lists/*
