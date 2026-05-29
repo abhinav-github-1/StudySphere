@@ -8,7 +8,8 @@ WORKDIR /build
 COPY pom.xml .
 COPY .mvn .mvn
 COPY mvnw .
-RUN chmod +x mvnw
+# Clean CRLF characters to prevent bad interpreter bash errors on Linux builder
+RUN tr -d '\r' < mvnw > mvnw.tmp && mv mvnw.tmp mvnw && chmod +x mvnw
 
 # Download dependencies (safe cache step)
 RUN ./mvnw dependency:go-offline -B
@@ -34,7 +35,8 @@ COPY --from=builder /build/target/*.jar /app/studyroom.jar
 # Copy dynamic reverse proxy configuration and boot scripts
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
+# Clean CRLF characters to prevent bad interpreter bash errors on runtime runner
+RUN tr -d '\r' < /app/entrypoint.sh > /app/entrypoint.sh.tmp && mv /app/entrypoint.sh.tmp /app/entrypoint.sh && chmod +x /app/entrypoint.sh
 
 # Expose standard container port
 EXPOSE 80
