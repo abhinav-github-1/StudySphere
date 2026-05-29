@@ -1,0 +1,19 @@
+#!/bin/sh
+MAVEN_VERSION="3.9.6"
+MAVEN_DIR="$(dirname "$0")/.maven"
+MAVEN_HOME="$MAVEN_DIR/apache-maven-$MAVEN_VERSION"
+MAVEN_ZIP="$MAVEN_DIR/maven.zip"
+MAVEN_URL="https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.zip"
+
+if [ ! -d "$MAVEN_HOME" ]; then
+    echo "[mvnw] Bootstrapping Maven $MAVEN_VERSION..."
+    mkdir -p "$MAVEN_DIR"
+    echo "[mvnw] Downloading Maven from $MAVEN_URL..."
+    curl -sL "$MAVEN_URL" -o "$MAVEN_ZIP"
+    echo "[mvnw] Extracting Maven zip..."
+    unzip -q "$MAVEN_ZIP" -d "$MAVEN_DIR"
+    rm "$MAVEN_ZIP"
+    echo "[mvnw] Maven bootstrapped successfully."
+fi
+
+exec "$MAVEN_HOME/bin/mvn" "$@"
