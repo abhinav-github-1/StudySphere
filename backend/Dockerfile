@@ -4,19 +4,16 @@
 FROM maven:3.9.6-eclipse-temurin-17 AS builder
 WORKDIR /build
 
-# Copy Maven POM and wrapper directories first to exploit layer caching
+# Copy Maven POM first to exploit layer caching
 COPY pom.xml .
-COPY .mvn .mvn
-COPY mvnw .
-# Clean CRLF characters to prevent bad interpreter bash errors on Linux builder
-RUN tr -d '\r' < mvnw > mvnw.tmp && mv mvnw.tmp mvnw && chmod +x mvnw
 
-# Download dependencies (safe cache step)
-RUN ./mvnw dependency:go-offline -B
+# Download dependencies (safe cache step) using pre-installed Maven
+RUN mvn dependency:go-offline -B
 
 # Copy Java source files and compile
 COPY src ./src
-RUN ./mvnw clean package -DskipTests -B
+RUN mvn clean package -DskipTests -B
+
 
 # ==============================================================================
 # STAGE 2: Lightweight Production Runtime (Java 17 JRE + Nginx reverse proxy)
