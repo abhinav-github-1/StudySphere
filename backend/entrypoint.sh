@@ -2,7 +2,7 @@
 # entrypoint.sh — Startup script launching both Spring Boot jar and Nginx reverse proxy.
 
 echo "🚀 Starting Spring Boot Backend in background (Tomcat listening on 8085, Netty Socket.IO on 9092)..."
-java -Djsse.enableSNIExtension=false -jar /app/studyroom.jar &
+java -Djsse.enableSNIExtension=false -Djdk.tls.client.protocols=TLSv1.2 -jar /app/studyroom.jar &
 
 # Render injects the 'PORT' env variable. We replace the 'listen 80;' placeholder in nginx.conf dynamically.
 TARGET_PORT=${PORT:-80}

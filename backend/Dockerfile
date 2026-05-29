@@ -24,7 +24,8 @@ WORKDIR /app
 # Install Nginx using standard package manager (non-interactive to avoid timezone prompts)
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
-    apt-get install -y nginx && \
+    apt-get install -y nginx ca-certificates && \
+    update-ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy packaged Spring Boot JAR from builder stage
